@@ -1,11 +1,4 @@
-import { Temporal } from '@js-temporal/polyfill'
-
-function round(duration, relativeTo) {
-  const round_ = (duration) => duration.round({ relativeTo, largestUnit: 'year', smallestUnit: 'second' });
-
-  // https://github.com/tc39/proposal-temporal/issues/2508
-  return round_(round_(duration));
-}
+import { Temporal } from 'temporal-polyfill';
 
 export default function countdown(
   endDate,
@@ -20,8 +13,8 @@ export default function countdown(
 
   function getUiText() {
     const now = Temporal.Now.zonedDateTimeISO(timeZone);
+    const duration = now.until(endOfLife).round({ relativeTo: now, largestUnit: 'year', smallestUnit: 'second' });
 
-    const duration = round(now.until(endOfLife), now);
     const { sign } = duration;
     let { years, months, days, hours, minutes, seconds } = duration.abs();
 
